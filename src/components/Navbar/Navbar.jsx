@@ -1,17 +1,32 @@
 import { Link, NavLink } from "react-router";
-import smartDealsLogo from '../../assets/smart_deals_logo.png'
+import smartDealsLogo from "../../assets/smart_deals_logo.png";
+import { useContext } from "react";
+import { AuthContext } from "../../context/AuthContext";
+import { toast } from "react-toastify";
 
 const Navbar = () => {
-    const links = (
-      <>
-        <li>
-          <NavLink to="/">Home</NavLink>
-        </li>
-        <li>
-          <NavLink to="/all-products">All Products</NavLink>
-        </li>
-      </>
-    );
+  const { user, signOutUser } = useContext(AuthContext);
+
+  const handleSignOut = () => {
+    signOutUser()
+      .then(() => {
+        toast.info("Sign-out successful.");
+      })
+      .catch((error) => {
+        toast.error(error.message);
+      });
+  };
+
+  const links = (
+    <>
+      <li>
+        <NavLink to="/">Home</NavLink>
+      </li>
+      <li>
+        <NavLink to="/all-products">All Products</NavLink>
+      </li>
+    </>
+  );
   return (
     <div className="navbar bg-base-100 shadow-sm">
       <div className="navbar-start">
@@ -48,7 +63,29 @@ const Navbar = () => {
         <ul className="menu menu-horizontal px-1">{links}</ul>
       </div>
       <div className="navbar-end">
-        <a className="btn">Button</a>
+        {user ? (
+          <button
+            onClick={handleSignOut}
+            className="btn btn-outline btn-error btn-sm"
+          >
+            Logout
+          </button>
+        ) : (
+          <div className="flex items-center gap-4">
+            <Link
+              to="/login"
+              className="btn bg-linear-to-br px-4 py-3 font-semibold leading-5"
+            >
+              Login
+            </Link>
+            <Link
+              to="/register"
+              className="btn bg-linear-to-br from-[#632ee3] to-[#9f62f2] text-white px-4 py-3 font-semibold leading-5"
+            >
+              Register
+            </Link>
+          </div>
+        )}
       </div>
     </div>
   );
