@@ -9,7 +9,8 @@ const Register = () => {
   const [show, setShow] = useState(false);
   const [passwordError, setPasswordError] = useState("");
   const [submitting, setSubmitting] = useState(false);
-  const { user, setUser, createUser } = useContext(AuthContext);
+  const { user, setUser, createUser, signInWithGoogle } =
+    useContext(AuthContext);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -85,6 +86,17 @@ const Register = () => {
         setSubmitting(false);
       });
   };
+
+  const handleGoogleSignIn = () => {
+    signInWithGoogle()
+      .then((result) => {
+        console.log(result.user);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   return (
     <div className="p-4">
       <title>Sign Up</title>
@@ -202,6 +214,7 @@ const Register = () => {
             {/* Google Sign Up Button */}
             <div className="form-control">
               <button
+                onClick={handleGoogleSignIn}
                 type="button"
                 className="w-full btn bg-white text-gray-600 border border-gray-300 hover:bg-gray-50 p-3 rounded-md text-base font-medium shadow-sm flex items-center justify-center transition duration-150 ease-in-out"
               >
@@ -233,7 +246,7 @@ const Register = () => {
                     ></path>
                   </g>
                 </svg>
-                Sign Up With Google
+                Continue With Google
               </button>
             </div>
           </div>

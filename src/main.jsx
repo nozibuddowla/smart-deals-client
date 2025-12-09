@@ -9,6 +9,8 @@ import AuthProvider from "./context/AuthProvider.jsx";
 import Register from "./components/Register/Register.jsx";
 import { ToastContainer } from "react-toastify";
 import Login from "./components/Login/Login.jsx";
+import MyProducts from "./components/MyProducts/MyProducts.jsx";
+import MyBids from "./components/MyBids/MyBids.jsx";
 
 const router = createBrowserRouter([
   {
@@ -30,6 +32,14 @@ const router = createBrowserRouter([
       {
         path: "/login",
         element: <Login />,
+      },
+      {
+        path: "/myProducts",
+        element: <MyProducts />,
+      },
+      {
+        path: "/myBids",
+        element: <MyBids />,
       },
     ],
   },

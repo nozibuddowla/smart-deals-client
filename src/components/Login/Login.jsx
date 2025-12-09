@@ -184,7 +184,7 @@ const Login = () => {
                     ></path>
                   </g>
                 </svg>
-                Sign Up With Google
+                Continue With Google
               </button>
             </div>
           </div>
