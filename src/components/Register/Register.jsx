@@ -49,6 +49,8 @@ const Register = () => {
     const form = event.target;
     const email = form.email.value.trim();
     const pass = form.password.value.trim();
+    const name = form.name.value.trim();
+    const photo = form.photo.value.trim();
 
     const passErr = validatePassword(pass);
     if (passErr) {
@@ -59,9 +61,30 @@ const Register = () => {
     setSubmitting(true);
 
     createUser(email, pass)
-      .then(() => {
-        toast.success("Signup successful!");
-        setSubmitting(false);
+      .then((result) => {
+        // console.log(result.user);
+
+        const newUser = {
+          name,
+          email,
+          photo,
+          createdAt: new Date(),
+        };
+
+        fetch("http://localhost:3000/users", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(newUser),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            console.log("User saved to database:", data);
+            toast.success("Signup successful!");
+            setSubmitting(false);
+            form.reset();
+          });
       })
       .catch((error) => {
         console.error("Signup error:", error);
@@ -90,7 +113,26 @@ const Register = () => {
   const handleGoogleSignIn = () => {
     signInWithGoogle()
       .then((result) => {
-        console.log(result.user);
+        // console.log(result.user);
+        const newUser = {
+          name: result.user.displayName,
+          email: result.user.email,
+          photoURL: result.user.photoURL,
+          createdAt: new Date(),
+        };
+
+        // create user in the database
+        fetch("http://localhost:3000/users", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(newUser),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            console.log(data);
+          });
       })
       .catch((error) => {
         console.log(error);

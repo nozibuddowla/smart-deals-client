@@ -1,49 +1,11 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
-import { createBrowserRouter, RouterProvider } from "react-router";
-import RootLayout from "./layouts/RootLayout.jsx";
-import Home from "./components/Home/Home.jsx";
-import AllProducts from "./components/AllProducts/AllProducts.jsx";
+import { RouterProvider } from "react-router";
 import AuthProvider from "./context/AuthProvider.jsx";
-import Register from "./components/Register/Register.jsx";
 import { ToastContainer } from "react-toastify";
-import Login from "./components/Login/Login.jsx";
-import MyProducts from "./components/MyProducts/MyProducts.jsx";
-import MyBids from "./components/MyBids/MyBids.jsx";
+import router from "./router/Router.jsx";
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <RootLayout></RootLayout>,
-    children: [
-      {
-        index: true,
-        element: <Home />,
-      },
-      {
-        path: "/all-products",
-        element: <AllProducts />,
-      },
-      {
-        path: "/register",
-        element: <Register />,
-      },
-      {
-        path: "/login",
-        element: <Login />,
-      },
-      {
-        path: "/myProducts",
-        element: <MyProducts />,
-      },
-      {
-        path: "/myBids",
-        element: <MyBids />,
-      },
-    ],
-  },
-]);
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <AuthProvider>

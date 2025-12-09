@@ -12,7 +12,8 @@ const Login = () => {
   const from = location.state?.from?.pathname || "/";
   const navigate = useNavigate();
 
-  const { user, setUser, signInUser, setLoading } = useContext(AuthContext);
+  const { user, setUser, signInUser, setLoading, signInWithGoogle } =
+    useContext(AuthContext);
 
   useEffect(() => {
     if (user) {
@@ -67,6 +68,35 @@ const Login = () => {
 
         toast.error(message);
         setSubmitting(false);
+      });
+  };
+
+  const handleGoogleSignIn = () => {
+    signInWithGoogle()
+      .then((result) => {
+        console.log(result.user);
+        const newUser = {
+          name: result.user.displayName,
+          email: result.user.email,
+          photoURL: result.user.photoURL,
+          createdAt: new Date(),
+        };
+
+        // create user in the database
+        fetch("http://localhost:3000/users", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(newUser),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            console.log(data);
+          });
+      })
+      .catch((error) => {
+        console.log(error);
       });
   };
 
@@ -153,6 +183,7 @@ const Login = () => {
             {/* Google Sign Up Button */}
             <div className="form-control">
               <button
+                onClick={handleGoogleSignIn}
                 type="button"
                 className="w-full btn bg-white text-gray-600 border border-gray-300 hover:bg-gray-50 p-3 rounded-md text-base font-medium shadow-sm flex items-center justify-center transition duration-150 ease-in-out"
               >
