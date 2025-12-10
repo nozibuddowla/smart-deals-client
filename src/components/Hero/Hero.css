@@ -1,0 +1,29 @@
+/* Hero.css - Minimal and Clean */
+
+/* Background gradient */
+.hero-bg {
+  background: linear-gradient(128.29deg, rgba(255, 230.48, 252.55, 1),rgba(224, 248, 245, 1) 100%);
+}
+
+/* Responsive utilities - only if needed for older browsers */
+@media (max-width: 640px) {
+  .hero-bg {
+    min-height: 400px;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  .hero-bg {
+    min-height: 500px;
+  }
+}
+
+@media (min-width: 1025px) {
+  .hero-bg {
+    min-height: 535px;
+  }
+}
+
+.search-btn {
+  background: linear-gradient(125.07deg, rgba(99, 46, 227, 1),rgba(159, 98, 242, 1) 100%);
+}
