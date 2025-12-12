@@ -3,11 +3,13 @@ import Loader from "../Loader/Loader";
 import MyContainer from "../MyContainer";
 import { FaArrowLeft } from "react-icons/fa";
 import { div } from "framer-motion/client";
-import { useContext, useRef } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
+import Swal from "sweetalert2";
 
 const ProductDetails = () => {
   const product = useLoaderData();
+  const [bids, setBids] = useState([]);
   // console.log(product);
   const {
     _id,
@@ -29,6 +31,15 @@ const ProductDetails = () => {
   const { user } = useContext(AuthContext);
   // console.log(user);
 
+  useEffect(() => {
+    fetch(`http://localhost:3000/products/bids/${_id}`)
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("bids for this product", data);
+        setBids(data)
+      });
+  }, []);
+
   const date = new Date(product.created_at);
   const formattedDate = date.toLocaleDateString("en-US", {
     month: "2-digit",
@@ -48,7 +59,7 @@ const ProductDetails = () => {
     const image = form.buyer_image.value;
     const bid = parseInt(form.bid_price.value);
 
-    console.log(_id, name, email, bid);
+    // console.log(_id, name, email, bid);
 
     const newBid = {
       product: _id,
@@ -67,8 +78,17 @@ const ProductDetails = () => {
       body: JSON.stringify(newBid),
     })
       .then((res) => res.json())
-      .then(data => {
-        console.log("after placing bid", data);
+      .then((data) => {
+        if (data.insertedId) {
+          bidModalRef.current.close();
+          Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: "Your bid has been placed",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        }
       });
   };
 
@@ -303,6 +323,15 @@ const ProductDetails = () => {
         </div>
 
         {/* bids for this products */}
+        <div>
+          <h2 className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold ">
+            {" "}
+            Bids For This Products:{" "}
+            <span className="bg-linear-to-br from-[#632ee3] to-[#9f62f2] text-transparent bg-clip-text">
+              {bids.length}
+            </span>
+          </h2>
+        </div>
       </MyContainer>
     </div>
   );
