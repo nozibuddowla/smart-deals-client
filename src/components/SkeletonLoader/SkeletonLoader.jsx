@@ -7,7 +7,7 @@ const SkeletonLoader = ({ count = 6 }) => {
         <div key={index} className="flex  flex-col gap-4 bg-base-100 shadow-sm">
           <div className="skeleton h-72 w-full"></div>
           <div className="space-y-2 p-3">
-            <div className="skeleton h-5 w-32"></div>
+            <div className="skeleton h-14 w-full"></div>
             <div className="skeleton h-4 w-1/2"></div>
             <div className="skeleton h-7 w-full"></div>
           </div>

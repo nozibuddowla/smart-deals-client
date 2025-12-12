@@ -5,13 +5,13 @@ const ProductCard = ({ product }) => {
   return (
     <div className="p-4 flex flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md">
       <Link
-        to={`/product/${_id}`}
+        to={`/productDetails/${_id}`}
         className="mx-3 mt-3 flex h-[278px] overflow-hidden rounded-xl"
       >
         <img className="object-cover" src={image} alt={title} />
       </Link>
       <div className="mt-4">
-        <Link to={`/product/${_id}`}>
+        <Link to={`/productDetails/${_id}`}>
           <h5 className="text-[#001931] text-2xl font-medium leading-7 line-clamp-2 min-h-14">
             {title}
           </h5>
