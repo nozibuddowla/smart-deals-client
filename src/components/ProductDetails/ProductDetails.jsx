@@ -45,8 +45,31 @@ const ProductDetails = () => {
     const form = event.target;
     const name = form.buyer_name.value;
     const email = form.buyer_email.value;
-    const bid = form.bid_price.value;
+    const image = form.buyer_image.value;
+    const bid = parseInt(form.bid_price.value);
+
     console.log(_id, name, email, bid);
+
+    const newBid = {
+      product: _id,
+      buyer_name: name,
+      buyer_email: email,
+      buyer_image: image,
+      bid_price: bid,
+      status: "pending",
+    };
+
+    fetch("http://localhost:3000/bids", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newBid),
+    })
+      .then((res) => res.json())
+      .then(data => {
+        console.log("after placing bid", data);
+      });
   };
 
   return (
@@ -142,8 +165,7 @@ const ProductDetails = () => {
                       Product Details
                     </h3>
                     <p className="text-[#001931] leading-5 mb-3">
-                       <span className="font-semibold">Product ID: </span>{" "}
-                      {_id}
+                       <span className="font-semibold">Product ID: </span> {_id}
                     </p>
                     <p className="text-[#001931] leading-5">
                        <span className="font-semibold">Posted: </span>{" "}

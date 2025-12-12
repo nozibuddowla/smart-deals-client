@@ -6,7 +6,7 @@ const HydrationFallback = () => {
   return (
     <div className="p-12">
       <MyContainer>
-        <div className="min-h-screen flex items-center justify-center">
+        <div className="min-h-screen flex flex-col items-center justify-center space-y-2">
           <ScaleLoader
             color="#e74c3c"
             height={70}
