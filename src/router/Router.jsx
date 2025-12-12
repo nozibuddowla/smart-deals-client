@@ -7,6 +7,7 @@ import Register from "../components/Register/Register";
 import RootLayout from "../layouts/RootLayout";
 import { createBrowserRouter } from "react-router";
 import PrivateRouter from "./PrivateRouter";
+import ProductDetails from "../components/ProductDetails/ProductDetails";
 
 const router = createBrowserRouter([
   {
@@ -44,6 +45,12 @@ const router = createBrowserRouter([
             <MyBids />
           </PrivateRouter>
         ),
+      },
+      {
+        path: "productDetails/:id",
+        loader: ({ params }) =>
+          fetch(`http://localhost:3000/products/${params.id}`),
+        element: <ProductDetails></ProductDetails>,
       },
     ],
   },

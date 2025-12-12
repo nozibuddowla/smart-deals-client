@@ -5,6 +5,8 @@ import "./Hero.css";
 import { BiSearch } from "react-icons/bi";
 import bgWavePatternLeft from "../../assets/bg-hero-left.png";
 import bgWavePatternRight from "../../assets/bg-hero-right.png";
+import { NavLink } from "react-router";
+import MyContainer from "../MyContainer";
 
 const Hero = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -44,61 +46,30 @@ const Hero = () => {
     <div className="relative min-h-[400px] sm:min-h-[500px] lg:min-h-[535px] overflow-hidden hero-bg">
       {/* Background elements */}
       <div className="absolute inset-0 overflow-hidden">
-        {/* Left Wave Pattern - Image */}
+        {/* Left Wave Pattern - Responsive for all devices */}
         <div
-          className="absolute left-0 top-0 bottom-0 w-1/8 md:w-1/7 lg:w-1/6 bg-no-repeat bg-cover bg-left opacity-80"
-          style={{ backgroundImage: `url(${bgWavePatternLeft})` }}
+          className="absolute left-0 top-0 bottom-0 
+                     w-20 sm:w-24 md:w-32 lg:w-40 xl:w-48 2xl:w-56
+                     bg-no-repeat bg-cover bg-left 
+                     opacity-60 sm:opacity-70 md:opacity-80"
+          style={{
+            backgroundImage: `url(${bgWavePatternLeft})`,
+            backgroundPosition: "left center",
+            backgroundSize: "contain",
+          }}
         />
 
-        {/* Right Wave Pattern - Image */}
+        {/* Right Wave Pattern - Responsive for all devices */}
         <div
-          className="absolute right-0 top-0 bottom-0 w-1/8 md:w-1/7 lg:w-1/6 bg-no-repeat bg-cover bg-right opacity-80"
-          style={{ backgroundImage: `url(${bgWavePatternRight})` }}
-        />
-
-        {/* Animated floating orbs */}
-        <motion.div
-          animate={{
-            x: [0, 30, 0],
-            y: [0, -50, 0],
-            scale: [1, 1.1, 1],
+          className="absolute right-0 top-0 bottom-0 
+                     w-20 sm:w-24 md:w-32 lg:w-40 xl:w-48 2xl:w-56
+                     bg-no-repeat bg-cover bg-right 
+                     opacity-60 sm:opacity-70 md:opacity-80"
+          style={{
+            backgroundImage: `url(${bgWavePatternRight})`,
+            backgroundPosition: "right center",
+            backgroundSize: "contain",
           }}
-          transition={{
-            duration: 7,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-          className="absolute top-10 sm:top-20 left-5 sm:left-10 w-32 h-32 sm:w-48 sm:h-48 lg:w-64 lg:h-64 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-70"
-        />
-
-        <motion.div
-          animate={{
-            x: [0, -30, 0],
-            y: [0, 50, 0],
-            scale: [1, 0.9, 1],
-          }}
-          transition={{
-            duration: 8,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 1,
-          }}
-          className="absolute top-20 sm:top-40 right-5 sm:right-10 w-32 h-32 sm:w-48 sm:h-48 lg:w-64 lg:h-64 bg-pink-300 rounded-full mix-blend-multiply filter blur-xl opacity-70"
-        />
-
-        <motion.div
-          animate={{
-            x: [0, 20, 0],
-            y: [0, -30, 0],
-            scale: [1, 1.2, 1],
-          }}
-          transition={{
-            duration: 9,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 2,
-          }}
-          className="absolute -bottom-4 sm:-bottom-8 left-10 sm:left-20 w-32 h-32 sm:w-48 sm:h-48 lg:w-64 lg:h-64 bg-blue-300 rounded-full mix-blend-multiply filter blur-xl opacity-70"
         />
       </div>
 
@@ -175,7 +146,7 @@ const Hero = () => {
               whileTap={{ scale: 0.95 }}
               className="w-full sm:w-auto px-6 sm:px-8 py-2.5 sm:py-3 text-sm sm:text-base search-btn text-white font-semibold rounded-lg shadow-lg transition-all"
             >
-              Watch All Products
+              <NavLink to="/all-products">Watch All Products</NavLink>
             </motion.button>
             <motion.button
               whileHover={{ scale: 1.05, y: -5 }}
@@ -197,7 +168,7 @@ const Hero = () => {
               repeat: Infinity,
               ease: "easeInOut",
             }}
-            className="absolute top-1/4 left-10 hidden xl:block"
+            className="absolute top-1/4 left-10 hidden lg:block"
           >
             <div className="w-12 h-12 lg:w-16 lg:h-16 bg-linear-to-br from-purple-400 to-pink-400 rounded-lg transform rotate-12 opacity-80" />
           </motion.div>
@@ -213,7 +184,7 @@ const Hero = () => {
               ease: "easeInOut",
               delay: 0.5,
             }}
-            className="absolute top-1/3 right-20 hidden xl:block"
+            className="absolute top-1/3 right-20 hidden lg:block"
           >
             <div className="w-10 h-10 lg:w-12 lg:h-12 bg-linear-to-br from-blue-400 to-purple-400 rounded-full opacity-80" />
           </motion.div>
@@ -229,9 +200,25 @@ const Hero = () => {
               ease: "easeInOut",
               delay: 1,
             }}
-            className="absolute bottom-1/4 left-1/4 hidden xl:block"
+            className="absolute bottom-1/6 xl:bottom-1/4 left-1/4 xl:left-1/6 hidden lg:block"
           >
-            <div className="w-8 h-8 lg:w-10 lg:h-10 bg-gradient-to-br from-pink-400 to-purple-400 rounded-lg transform -rotate-12 opacity-80" />
+            <div className="w-8 h-8 lg:w-10 lg:h-10 bg-linear-to-br from-blue-400 to-purple-400 rounded-lg transform -rotate-12 opacity-80" />
+          </motion.div>
+
+          <motion.div
+            animate={{
+              y: [-15, 15, -15],
+              rotate: [5, -5, 5],
+            }}
+            transition={{
+              duration: 3.5,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: 0.5,
+            }}
+            className="absolute bottom-1/6 xl:bottom-1/4 right-1/4 xl:right-1/6 hidden lg:block"
+          >
+            <div className="w-8 h-8 lg:w-10 lg:h-10 bg-linear-to-br from-purple-400 to-pink-400 rounded-full opacity-80" />
           </motion.div>
         </div>
       </motion.div>
