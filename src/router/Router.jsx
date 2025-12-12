@@ -8,11 +8,13 @@ import RootLayout from "../layouts/RootLayout";
 import { createBrowserRouter } from "react-router";
 import PrivateRouter from "./PrivateRouter";
 import ProductDetails from "../components/ProductDetails/ProductDetails";
+import HydrationFallback from "../components/HydrationFallback/HydrationFallback";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <RootLayout></RootLayout>,
+    hydrateFallbackElement: <HydrationFallback />,
     children: [
       {
         index: true,
