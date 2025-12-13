@@ -11,6 +11,19 @@ const ProductDetails = () => {
   const product = useLoaderData();
   const [bids, setBids] = useState([]);
   // console.log(product);
+  const bidModalRef = useRef(null);
+  const { user } = useContext(AuthContext);
+  // console.log(user);
+
+  useEffect(() => {
+    fetch(`http://localhost:3000/products/bids/${_id}`)
+      .then((res) => res.json())
+      .then((data) => {
+        // console.log("bids for this product", data);
+        setBids(data);
+      });
+  }, []);
+
   const {
     _id,
     title,
@@ -27,18 +40,6 @@ const ProductDetails = () => {
     seller_contact,
     status,
   } = product;
-  const bidModalRef = useRef(null);
-  const { user } = useContext(AuthContext);
-  // console.log(user);
-
-  useEffect(() => {
-    fetch(`http://localhost:3000/products/bids/${_id}`)
-      .then((res) => res.json())
-      .then((data) => {
-        console.log("bids for this product", data);
-        setBids(data)
-      });
-  }, []);
 
   const date = new Date(product.created_at);
   const formattedDate = date.toLocaleDateString("en-US", {
@@ -53,6 +54,7 @@ const ProductDetails = () => {
 
   const handleBidSubmit = (event) => {
     event.preventDefault();
+
     const form = event.target;
     const name = form.buyer_name.value;
     const email = form.buyer_email.value;
@@ -81,6 +83,7 @@ const ProductDetails = () => {
       .then((data) => {
         if (data.insertedId) {
           bidModalRef.current.close();
+
           Swal.fire({
             position: "top-end",
             icon: "success",
@@ -88,6 +91,14 @@ const ProductDetails = () => {
             showConfirmButton: false,
             timer: 1500,
           });
+
+          // add the new bid to the state
+          newBid._id = data.insertedId;
+          
+          const newBids = [...bids, newBid];
+          newBids.sort((a, b) => b.bid_price - a.bid_price);
+
+          setBids(newBids);
         }
       });
   };
@@ -323,14 +334,80 @@ const ProductDetails = () => {
         </div>
 
         {/* bids for this products */}
-        <div>
-          <h2 className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold ">
-            {" "}
-            Bids For This Products:{" "}
-            <span className="bg-linear-to-br from-[#632ee3] to-[#9f62f2] text-transparent bg-clip-text">
-              {bids.length}
-            </span>
-          </h2>
+        <h2 className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold ">
+          {" "}
+          Bids For This Products:{" "}
+          <span className="bg-linear-to-br from-[#632ee3] to-[#9f62f2] text-transparent bg-clip-text">
+            {bids.length}
+          </span>
+        </h2>
+
+        <div className="relative overflow-x-auto bg-white shadow-sm rounded-lg border border-gray-200 my-10">
+          <table className="w-full text-sm text-left text-gray-700">
+            {/* head */}
+            <thead className="text-sm text-gray-700 bg-gray-100 border-b border-gray-300">
+              <tr>
+                <th scope="col" className="w-14 p-2">
+                  SL No
+                </th>
+                <th scope="col" className="px-6 py-3 font-medium">
+                  Seller
+                </th>
+                <th scope="col" className="px-4 py-3 font-medium">
+                  Bid Price
+                </th>
+                <th scope="col" className="px-6 py-3 font-medium">
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {/* row 1 */}
+              {bids.map((bid, index) => (
+                <tr
+                  key={index}
+                  className="bg-white border-b border-gray-200 hover:bg-gray-50 transition-colors"
+                >
+                  <th className="w-14 p-4 font-medium text-gray-900">
+                    {index + 1}
+                  </th>
+                  <td className="px-6 py-4">
+                    <div className="flex items-center gap-3">
+                      <div className="h-10 w-10 rounded-full overflow-hidden">
+                        <img
+                          src={bid?.buyer_image}
+                          alt={bid?.buyer_name}
+                          className=" w-full h-full object-cover"
+                        />
+                      </div>
+                      <div>
+                        <div className="font-medium text-[#001931] leading-5">
+                          {bid.buyer_name}
+                        </div>
+                        <div className="text-sm leading-4 text-[#001931] opacity-80">
+                          {bid.buyer_email}
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  <td className="px-4 py-4 font-semibold text-gray-900">
+                    {bid.bid_price}
+                  </td>
+                  <td className="px-6 py-4">
+                    <div className="flex items-center gap-2">
+                      <button className="btn btn-outline border border-[#4CAF50] text-[#4caf50] px-2 py-1.5 btn-xs">
+                        Accept Offer
+                      </button>
+
+                      <button className="btn btn-outline border border-[#FF3D00] text-[#FF3D00] px-2 py-1.5 btn-xs">
+                        Reject Offer
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </MyContainer>
     </div>
