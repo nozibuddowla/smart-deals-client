@@ -2,7 +2,6 @@ import { Link, useLoaderData } from "react-router";
 import Loader from "../Loader/Loader";
 import MyContainer from "../MyContainer";
 import { FaArrowLeft } from "react-icons/fa";
-import { div } from "framer-motion/client";
 import { useContext, useEffect, useRef, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import Swal from "sweetalert2";
