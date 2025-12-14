@@ -48,10 +48,7 @@ const Hero = () => {
       <div className="absolute inset-0 overflow-hidden">
         {/* Left Wave Pattern - Responsive for all devices */}
         <div
-          className="absolute left-0 top-0 bottom-0 
-                     w-20 sm:w-24 md:w-32 lg:w-40 xl:w-48 2xl:w-56
-                     bg-no-repeat bg-cover bg-left 
-                     opacity-60 sm:opacity-70 md:opacity-80"
+          className="absolute left-0 top-0 bottom-0 w-20 sm:w-24 md:w-32 lg:w-40 xl:w-48 2xl:w-56bg-no-repeat bg-cover bg-left opacity-60 sm:opacity-70 md:opacity-80"
           style={{
             backgroundImage: `url(${bgWavePatternLeft})`,
             backgroundPosition: "left center",
@@ -61,10 +58,7 @@ const Hero = () => {
 
         {/* Right Wave Pattern - Responsive for all devices */}
         <div
-          className="absolute right-0 top-0 bottom-0 
-                     w-20 sm:w-24 md:w-32 lg:w-40 xl:w-48 2xl:w-56
-                     bg-no-repeat bg-cover bg-right 
-                     opacity-60 sm:opacity-70 md:opacity-80"
+          className="absolute right-0 top-0 bottom-0 w-20 sm:w-24 md:w-32 lg:w-40 xl:w-48 2xl:w-56 bg-no-repeat bg-cover bg-right opacity-60 sm:opacity-70 md:opacity-80"
           style={{
             backgroundImage: `url(${bgWavePatternRight})`,
             backgroundPosition: "right center",

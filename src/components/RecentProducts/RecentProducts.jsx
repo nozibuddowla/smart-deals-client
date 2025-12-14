@@ -1,6 +1,7 @@
 import React, { use, useContext } from "react";
 import MyContainer from "../MyContainer";
 import ProductCard from "../ProductCard/ProductCard";
+import { Link } from "react-router";
 
 const RecentProducts = ({ recentProductsPromise }) => {
   const recentProducts = use(recentProductsPromise);
@@ -20,6 +21,11 @@ const RecentProducts = ({ recentProductsPromise }) => {
           {recentProducts.map((product) => {
             return <ProductCard key={product._id} product={product} />;
           })}
+        </div>
+        <div className="flex justify-center items-center">
+          <Link to="/all-products" className="btn bg-linear-to-br  from-[#632EE3] to-[#9F62F2] text-white py-3 px-4 rounded-lg">
+            Show All
+          </Link>
         </div>
       </MyContainer>
     </div>
