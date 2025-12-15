@@ -124,7 +124,7 @@ const ProductDetails = () => {
                 <h1 className="text-[#001931] text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold leading-tight">
                   {title}
                 </h1>
-                <p className="w-fit flex justify-center items-center py-1.5 px-3 bg-gradient-to-br from-purple-600/15 to-purple-400/15 rounded-full">
+                <p className="w-fit flex justify-center items-center py-1.5 px-3 bg-linear-to-br from-purple-600/15 to-purple-400/15 rounded-full">
                   <span className="bg-linear-to-br from-purple-600 to-purple-400 bg-clip-text text-transparent text-xs font-medium leading-4">
                     {category}
                   </span>

@@ -9,6 +9,7 @@ import { createBrowserRouter } from "react-router";
 import PrivateRouter from "./PrivateRouter";
 import ProductDetails from "../components/ProductDetails/ProductDetails";
 import HydrationFallback from "../components/HydrationFallback/HydrationFallback";
+import CreateProduct from "../components/CreateProduct/CreateProduct";
 
 const router = createBrowserRouter([
   {
@@ -39,6 +40,14 @@ const router = createBrowserRouter([
         element: (
           <PrivateRouter>
             <MyProducts />
+          </PrivateRouter>
+        ),
+      },
+      {
+        path: "/createProduct",
+        element: (
+          <PrivateRouter>
+            <CreateProduct />
           </PrivateRouter>
         ),
       },
