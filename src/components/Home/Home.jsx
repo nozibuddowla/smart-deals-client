@@ -4,7 +4,7 @@ import RecentProducts from "../RecentProducts/RecentProducts";
 import SkeletonLoader from "../SkeletonLoader/SkeletonLoader";
 
 const recentProductsPromise = fetch(
-  "http://localhost:3000/recent-products"
+  `${import.meta.env.VITE_API_URL}/recent-products`
 ).then((res) => res.json());
 
 const Home = () => {

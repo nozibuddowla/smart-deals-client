@@ -24,7 +24,9 @@ const router = createBrowserRouter([
       {
         path: "/all-products",
         loader: () =>
-          fetch("http://localhost:3000/products").then((res) => res.json()),
+          fetch(`${import.meta.env.VITE_API_URL}/products`).then((res) =>
+            res.json()
+          ),
         element: <AllProducts />,
       },
       {
@@ -62,7 +64,7 @@ const router = createBrowserRouter([
       {
         path: "productDetails/:id",
         loader: ({ params }) =>
-          fetch(`http://localhost:3000/products/${params.id}`),
+          fetch(`${import.meta.env.VITE_API_URL}/products/${params.id}`),
         element: <ProductDetails></ProductDetails>,
       },
     ],

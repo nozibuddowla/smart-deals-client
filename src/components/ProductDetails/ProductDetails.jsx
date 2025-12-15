@@ -15,7 +15,7 @@ const ProductDetails = () => {
   // console.log(user);
 
   useEffect(() => {
-    fetch(`http://localhost:3000/products/bids/${_id}`)
+    fetch(`${import.meta.env.VITE_API_URL}/products/bids/${_id}`)
       .then((res) => res.json())
       .then((data) => {
         // console.log("bids for this product", data);
@@ -71,7 +71,7 @@ const ProductDetails = () => {
       status: "pending",
     };
 
-    fetch("http://localhost:3000/bids", {
+    fetch(`${import.meta.env.VITE_API_URL}/bids`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -93,7 +93,7 @@ const ProductDetails = () => {
 
           // add the new bid to the state
           newBid._id = data.insertedId;
-          
+
           const newBids = [...bids, newBid];
           newBids.sort((a, b) => b.bid_price - a.bid_price);
 

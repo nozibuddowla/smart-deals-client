@@ -7,10 +7,10 @@ const MyProducts = () => {
   const [products, setProducts] = useState([]);
   useEffect(() => {
     if (user?.email) {
-      fetch(`http://localhost:3000/products?email=${user.email}`)
+      fetch(`${import.meta.env.VITE_API_URL}/products?email=${user.email}`)
         .then((res) => res.json())
         .then((data) => {
-        //   console.log(data);
+          //   console.log(data);
           setProducts(data);
         });
     }

@@ -47,7 +47,7 @@ const CreateProduct = () => {
       created_at: new Date().toISOString(),
     };
 
-    fetch("http://localhost:3000/products", {
+    fetch(`${import.meta.env.VITE_API_URL}/products`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
