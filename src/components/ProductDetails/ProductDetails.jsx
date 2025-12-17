@@ -15,13 +15,17 @@ const ProductDetails = () => {
   // console.log(user);
 
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_URL}/products/bids/${_id}`)
+    fetch(`${import.meta.env.VITE_API_URL}/products/bids/${_id}`, {
+      headers: {
+        authorization: `Bearer ${user.accessToken}`
+      }
+    })
       .then((res) => res.json())
       .then((data) => {
         // console.log("bids for this product", data);
         setBids(data);
       });
-  }, []);
+  }, [user]);
 
   const {
     _id,

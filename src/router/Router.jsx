@@ -88,7 +88,11 @@ const router = createBrowserRouter([
           fetchWithErrorHandling(
             `${import.meta.env.VITE_API_URL}/products/${params.id}`
           ),
-        element: <ProductDetails></ProductDetails>,
+        element: (
+          <PrivateRouter>
+            <ProductDetails></ProductDetails>
+          </PrivateRouter>
+        ),
       },
     ],
   },
