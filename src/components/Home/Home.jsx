@@ -7,8 +7,8 @@ const recentProductsPromise = fetch(
   `${import.meta.env.VITE_API_URL}/recent-products`
 )
   .then((res) => {
-    console.log("API Response status:", res.status);
-    console.log("API URL:", import.meta.env.VITE_API_URL);
+    // console.log("API Response status:", res.status);
+    // console.log("API URL:", import.meta.env.VITE_API_URL);
 
     if (!res.ok) {
       throw new Error(`HTTP error! status: ${res.status}`);

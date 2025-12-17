@@ -9,7 +9,7 @@ const Register = () => {
   const [show, setShow] = useState(false);
   const [passwordError, setPasswordError] = useState("");
   const [submitting, setSubmitting] = useState(false);
-  const { user, setUser, createUser, signInWithGoogle } =
+  const { user, setUser, createUser, updateUserProfile, signInWithGoogle } =
     useContext(AuthContext);
   const location = useLocation();
   const navigate = useNavigate();
@@ -52,6 +52,7 @@ const Register = () => {
     const name = form.name.value.trim();
     const photo = form.photo.value.trim();
 
+    // validation
     const passErr = validatePassword(pass);
     if (passErr) {
       setPasswordError(passErr);
@@ -60,54 +61,69 @@ const Register = () => {
 
     setSubmitting(true);
 
-    createUser(email, pass)
-      .then((result) => {
-        // console.log(result.user);
+    // create user in Firebase auth
+    createUser(email, pass).then((result) => {
+      const loggedUser = result.user;
+      // console.log(loggedUser);
 
-        const newUser = {
-          name,
-          email,
-          photo,
-          createdAt: new Date(),
-        };
+      // update Firebase profile
+      updateUserProfile(name, photo)
+        .then(() => {
+          // Update local state immediately so Navbar shows name/photo
+          setUser({ ...loggedUser, displayName: name, photoURL: photo });
 
-        fetch(`${import.meta.env.VITE_API_URL}/users`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(newUser),
+          const newUser = {
+            name,
+            email,
+            photo,
+            createdAt: new Date(),
+          };
+
+          fetch(`${import.meta.env.VITE_API_URL}/users`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(newUser),
+          })
+            .then((res) => res.json())
+            .then((data) => {
+              // console.log("User saved to database:", data);
+              toast.success("Signup successful!");
+              setSubmitting(false);
+              form.reset();
+            }).catch((dbError) => {
+              console.error("Database save error:", dbError);
+              setSubmitting(false);
+            });
         })
-          .then((res) => res.json())
-          .then((data) => {
-            console.log("User saved to database:", data);
-            toast.success("Signup successful!");
-            setSubmitting(false);
-            form.reset();
-          });
-      })
-      .catch((error) => {
-        console.error("Signup error:", error);
+        .catch((profileError) => {
+          console.error("Profile update error:", profileError);
+          setSubmitting(false);
+        });
+        })
+        .catch((error) => {
+          console.error("Signup error:", error);
 
-        if (error.code === "auth/email-already-in-use") {
-          toast.error(
-            "This email is already registered. Please login instead."
-          );
-        } else if (error.code === "auth/invalid-email") {
-          toast.error("Invalid email address. Please enter a valid email.");
-        } else if (error.code === "auth/operation-not-allowed") {
-          toast.error(
-            "Email/password accounts are not enabled. Contact support."
-          );
-        } else if (error.code === "auth/weak-password") {
-          toast.error(
-            "Password is too weak. Please use at least 6 characters."
-          );
-        } else {
-          toast.error(error.message || "Signup failed. Please try again.");
-        }
-        setSubmitting(false);
-      });
+          if (error.code === "auth/email-already-in-use") {
+            toast.error(
+              "This email is already registered. Please login instead."
+            );
+          } else if (error.code === "auth/invalid-email") {
+            toast.error("Invalid email address. Please enter a valid email.");
+          } else if (error.code === "auth/operation-not-allowed") {
+            toast.error(
+              "Email/password accounts are not enabled. Contact support."
+            );
+          } else if (error.code === "auth/weak-password") {
+            toast.error(
+              "Password is too weak. Please use at least 6 characters."
+            );
+          } else {
+            toast.error(error.message || "Signup failed. Please try again.");
+          }
+          setSubmitting(false);
+        });
   };
 
   const handleGoogleSignIn = () => {

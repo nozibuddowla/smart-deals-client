@@ -7,12 +7,15 @@ const MyBids = () => {
   const { user } = use(AuthContext);
   const [bids, setBids] = useState([]);
 
-  console.log("token", user.accessToken);
-  
+  // console.log("token", user.accessToken);
 
   useEffect(() => {
     if (user?.email) {
-      fetch(`${import.meta.env.VITE_API_URL}/bids?email=${user.email}`)
+      fetch(`${import.meta.env.VITE_API_URL}/bids?email=${user.email}`, {
+        headers: {
+          authorization: `Bearer ${user.accessToken}`,
+        },
+      })
         .then((res) => res.json())
         .then((data) => {
           //   console.log(data);

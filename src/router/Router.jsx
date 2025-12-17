@@ -13,12 +13,12 @@ import CreateProduct from "../components/CreateProduct/CreateProduct";
 
 // Helper function for API calls with error handling
 const fetchWithErrorHandling = async (url) => {
-  console.log("Fetching URL:", url);
+  // console.log("Fetching URL:", url);
 
   const response = await fetch(url);
 
-  console.log("Response status:", response.status);
-  console.log("Response OK:", response.ok);
+  // console.log("Response status:", response.status);
+  // console.log("Response OK:", response.ok);
 
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}, URL: ${url}`);
