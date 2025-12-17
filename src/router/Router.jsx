@@ -11,6 +11,29 @@ import ProductDetails from "../components/ProductDetails/ProductDetails";
 import HydrationFallback from "../components/HydrationFallback/HydrationFallback";
 import CreateProduct from "../components/CreateProduct/CreateProduct";
 
+// Helper function for API calls with error handling
+const fetchWithErrorHandling = async (url) => {
+  console.log("Fetching URL:", url);
+
+  const response = await fetch(url);
+
+  console.log("Response status:", response.status);
+  console.log("Response OK:", response.ok);
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}, URL: ${url}`);
+  }
+
+  const contentType = response.headers.get("content-type");
+  if (!contentType || !contentType.includes("application/json")) {
+    const text = await response.text();
+    console.error("Non-JSON response:", text.substring(0, 200));
+    throw new TypeError(`Response is not JSON from ${url}`);
+  }
+
+  return response.json();
+};
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -24,9 +47,7 @@ const router = createBrowserRouter([
       {
         path: "/all-products",
         loader: () =>
-          fetch(`${import.meta.env.VITE_API_URL}/products`).then((res) =>
-            res.json()
-          ),
+          fetchWithErrorHandling(`${import.meta.env.VITE_API_URL}/products`),
         element: <AllProducts />,
       },
       {
@@ -64,7 +85,9 @@ const router = createBrowserRouter([
       {
         path: "productDetails/:id",
         loader: ({ params }) =>
-          fetch(`${import.meta.env.VITE_API_URL}/products/${params.id}`),
+          fetchWithErrorHandling(
+            `${import.meta.env.VITE_API_URL}/products/${params.id}`
+          ),
         element: <ProductDetails></ProductDetails>,
       },
     ],
