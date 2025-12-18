@@ -24,7 +24,7 @@ const recentProductsPromise = fetch(
   })
   .catch((error) => {
     console.error("Failed to fetch recent products:", error);
-    throw error;
+    return [];
   });
 
 const Home = () => {

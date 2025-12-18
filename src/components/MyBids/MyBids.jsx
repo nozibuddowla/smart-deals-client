@@ -7,22 +7,38 @@ const MyBids = () => {
   const { user } = use(AuthContext);
   const [bids, setBids] = useState([]);
 
-  // console.log("token", user.accessToken);
-
   useEffect(() => {
-    if (user?.email) {
-      fetch(`${import.meta.env.VITE_API_URL}/bids?email=${user.email}`, {
-        headers: {
-          authorization: `Bearer ${user.accessToken}`,
-        },
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          //   console.log(data);
+    const fetchBids = async () => {
+      if (user?.email) {
+        try {
+          // GET the valid Firebase ID token
+          const token = await user.getIdToken();
+
+          const res = await fetch(
+            `${import.meta.env.VITE_API_URL}/bids?email=${user.email}`,
+            {
+              headers: {
+                authorization: `Bearer ${token}`,
+              },
+            }
+          );
+
+          if (!res.ok) {
+            console.error("Error fetching bids:", res.status);
+            return;
+          }
+
+          const data = await res.json();
           setBids(data);
-        });
-    }
+        } catch (error) {
+          console.error("Error fetching bids:", error);
+        }
+      }
+    };
+
+    fetchBids();
   }, [user]);
+
 
   const handleDeleteBid = (_id) => {
     Swal.fire({
@@ -37,6 +53,9 @@ const MyBids = () => {
       if (result.isConfirmed) {
         fetch(`${import.meta.env.VITE_API_URL}/bids/${_id}`, {
           method: "DELETE",
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
         })
           .then((res) => res.json())
           .then((data) => {

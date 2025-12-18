@@ -44,25 +44,32 @@ const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
 
       if (currentUser) {
-        const loggedUser = { email: currentUser.email };
+        try {
+          const idToken = await currentUser.getIdToken();
 
-        fetch(`${import.meta.env.VITE_API_URL}/getToken`, {
-          method: "POST",
+          const res = await fetch(`${import.meta.env.VITE_API_URL}/getToken`, {
+            method: "POST",
 
-          headers: {
-            "content-type": "application/json",
-          },
+            headers: {
+              "Content-Type": "application/json",
+            },
 
-          body: JSON.stringify(loggedUser),
-        })
-          .then((res) => res.json())
-          .then((data) => {
-            // console.log("after getting token", data);
+            body: JSON.stringify({idToken}),
           });
+
+          if (!res.ok) {
+            throw new Error(`Server responded with ${res.status}`);
+          }
+
+          // const data = await res.json();
+          // console.log("Backend JWT:", data.token);
+        } catch (err) {
+          console.error("Error getting JWT from backend:", err);
+        }
       }
 
       setLoading(false);
