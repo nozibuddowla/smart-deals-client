@@ -46,38 +46,24 @@ const AuthProvider = ({ children }) => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
-
+      console.log("current user: ", currentUser);
+      
       if (currentUser) {
-        try {
-          // Get Firebase ID token
-          const idToken = await currentUser.getIdToken();
+        const loggedUser = { email: currentUser.email };
+        console.log("auth provider onstate", loggedUser);
+        
 
-          // Exchange Firebase token for your backend JWT
-          const res = await fetch(`${import.meta.env.VITE_API_URL}/getToken`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-
-            body: JSON.stringify({ idToken }),
+        fetch(`${import.meta.env.VITE_API_URL}/getToken`, {
+          method: "POST", 
+          headers: {
+            "content-type": "application/json"
+          },
+          body: JSON.stringify(loggedUser)
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            console.log("after getting token", data);
           });
-
-          if (!res.ok) {
-            throw new Error(`Server responded with ${res.status}`);
-          }
-
-          const data = await res.json();
-
-          if (data.token) {
-            localStorage.setItem("access-token", data.token);
-            // console.log("Backend JWT:", data.token);
-          }
-        } catch (err) {
-          console.error("Error getting JWT from backend:", err);
-        }
-      } else {
-        // User logged out - remove token
-        localStorage.removeItem("access-token");
       }
 
       setLoading(false);
