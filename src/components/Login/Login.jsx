@@ -39,7 +39,7 @@ const Login = () => {
     signInUser(email, pass)
       .then((userCredential) => {
         const user = userCredential.user;
-        console.log(user);
+        // console.log(user);
         
         setUser(user);
         toast.success("Signin successful!");

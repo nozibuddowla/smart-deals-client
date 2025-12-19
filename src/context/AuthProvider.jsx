@@ -49,27 +49,35 @@ const AuthProvider = ({ children }) => {
 
       if (currentUser) {
         try {
+          // Get Firebase ID token
           const idToken = await currentUser.getIdToken();
 
+          // Exchange Firebase token for your backend JWT
           const res = await fetch(`${import.meta.env.VITE_API_URL}/getToken`, {
             method: "POST",
-
             headers: {
               "Content-Type": "application/json",
             },
 
-            body: JSON.stringify({idToken}),
+            body: JSON.stringify({ idToken }),
           });
 
           if (!res.ok) {
             throw new Error(`Server responded with ${res.status}`);
           }
 
-          // const data = await res.json();
-          // console.log("Backend JWT:", data.token);
+          const data = await res.json();
+
+          if (data.token) {
+            localStorage.setItem("access-token", data.token);
+            // console.log("Backend JWT:", data.token);
+          }
         } catch (err) {
           console.error("Error getting JWT from backend:", err);
         }
+      } else {
+        // User logged out - remove token
+        localStorage.removeItem("access-token");
       }
 
       setLoading(false);

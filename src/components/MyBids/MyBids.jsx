@@ -39,7 +39,6 @@ const MyBids = () => {
     fetchBids();
   }, [user]);
 
-
   const handleDeleteBid = (_id) => {
     Swal.fire({
       title: "Are you sure?",
