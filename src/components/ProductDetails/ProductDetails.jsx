@@ -5,6 +5,7 @@ import { FaArrowLeft } from "react-icons/fa";
 import { useContext, useEffect, useRef, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import Swal from "sweetalert2";
+import axios from "axios";
 
 const ProductDetails = () => {
   const product = useLoaderData();
@@ -15,17 +16,26 @@ const ProductDetails = () => {
   // console.log(user);
 
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_URL}/products/bids/${_id}`, {
-      headers: {
-        authorization: `Bearer ${user.accessToken}`
-      }
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        // console.log("bids for this product", data);
-        setBids(data);
+    axios
+      .get(`${import.meta.env.VITE_API_URL}/products/bids/${_id}`)
+      .then((res) => {
+        console.log("after axios get", res);
+        setBids(res.data);
       });
   }, [user]);
+
+  // useEffect(() => {
+  //   fetch(`${import.meta.env.VITE_API_URL}/products/bids/${_id}`, {
+  //     headers: {
+  //       authorization: `Bearer ${user.accessToken}`,
+  //     },
+  //   })
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       // console.log("bids for this product", data);
+  //       setBids(data);
+  //     });
+  // }, [user]);
 
   const {
     _id,
@@ -368,7 +378,7 @@ const ProductDetails = () => {
               {/* row 1 */}
               {bids.map((bid, index) => (
                 <tr
-                  key={index}
+                  key={bid._id}
                   className="bg-white border-b border-gray-200 hover:bg-gray-50 transition-colors"
                 >
                   <th className="w-14 p-4 font-medium text-gray-900">
