@@ -3,13 +3,14 @@ import MyContainer from "../MyContainer";
 import { Link } from "react-router";
 import { FaArrowLeft } from "react-icons/fa6";
 import Swal from "sweetalert2";
-import { AuthContext } from "../../context/AuthContext";
+import axios from "axios";
+import useAuth from "../../hooks/useAuth";
 
 const CreateProduct = () => {
-  const { user } = useContext(AuthContext);
+  const { user } = useAuth();
   const [products, setProducts] = useState([]);
 
-  const handleProductSubmit = (event) => {
+  const handleCreateProductSubmit = (event) => {
     event.preventDefault();
 
     const form = event.target;
@@ -22,8 +23,8 @@ const CreateProduct = () => {
     const productCondition = form.condition.value;
     const productUsage = form.usage.value;
     const productImage = form.image.value;
-    const sellerName = form.seller_name.value;
-    const sellerEmail = form.email.value;
+    // const sellerName = form.seller_name.value;
+    // const sellerEmail = form.email.value;
     const sellerContact = form.seller_contact.value;
     const sellerImage = form.seller_image.value;
     const sellerLocation = form.location.value;
@@ -35,11 +36,13 @@ const CreateProduct = () => {
       price_min: productMinPrice,
       price_max: productMaxPrice,
       condition: productCondition,
-      email: sellerEmail,
+      // email: sellerEmail,
+      email: user.email,
       image: productImage,
       location: sellerLocation,
       seller_image: sellerImage,
-      seller_name: sellerName,
+      // seller_name: sellerName,
+      seller_name: user.displayName,
       usage: productUsage,
       description: productDescription,
       seller_contact: sellerContact,
@@ -47,36 +50,54 @@ const CreateProduct = () => {
       created_at: new Date().toISOString(),
     };
 
-    fetch(`${import.meta.env.VITE_API_URL}/products`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(newProduct),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.insertedId) {
+    axios
+      .post(`${import.meta.env.VITE_API_URL}/products`, newProduct)
+      .then((res) => {
+        console.log(res.data);
+        if (res.data.insertedId) {
           Swal.fire({
             position: "top-end",
             icon: "success",
-            title: "Product created successfully!",
+            title: "Your Product has been created successfully!",
             showConfirmButton: false,
             timer: 1500,
           });
+
           form.reset();
           const newProductsArray = [...products, newProduct];
           setProducts(newProductsArray);
         }
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: "Something went wrong!",
-        });
       });
+    // fetch(`${import.meta.env.VITE_API_URL}/products`, {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify(newProduct),
+    // })
+    //   .then((res) => res.json())
+    //   .then((data) => {
+    //     if (data.insertedId) {
+    //       Swal.fire({
+    //         position: "top-end",
+    //         icon: "success",
+    //         title: "Product created successfully!",
+    //         showConfirmButton: false,
+    //         timer: 1500,
+    //       });
+    //       form.reset();
+    //       const newProductsArray = [...products, newProduct];
+    //       setProducts(newProductsArray);
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     console.error("Error:", error);
+    //     Swal.fire({
+    //       icon: "error",
+    //       title: "Oops...",
+    //       text: "Something went wrong!",
+    //     });
+    //   });
   };
 
   return (
@@ -100,7 +121,7 @@ const CreateProduct = () => {
 
         <div className="flex flex-col justify-center items-center">
           <div className="card bg-base-100 max-w-3xl shadow-sm p-10">
-            <form onSubmit={handleProductSubmit}>
+            <form onSubmit={handleCreateProductSubmit}>
               <fieldset className="fieldset space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="flex flex-col">
@@ -133,6 +154,7 @@ const CreateProduct = () => {
                       <option value="Appliances">Appliances</option>
                       <option value="Gaming">Gaming</option>
                       <option value="Kids">Kids</option>
+                      <option value="Vehicle">Vehicle</option>
                     </select>
                   </div>
                 </div>
@@ -294,7 +316,10 @@ const CreateProduct = () => {
                 </div>
 
                 <div className="flex justify-end items-center gap-4">
-                  <button type="submit" className="btn w-full bg-linear-to-br from-[#632ee3] to-[#9f62f2] text-white py-3 px-4">
+                  <button
+                    type="submit"
+                    className="btn w-full bg-linear-to-br from-[#632ee3] to-[#9f62f2] text-white py-3 px-4"
+                  >
                     Create a Product
                   </button>
                 </div>

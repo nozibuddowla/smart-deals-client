@@ -147,7 +147,7 @@ const Hero = () => {
               whileTap={{ scale: 0.95 }}
               className="w-full sm:w-auto px-6 sm:px-8 py-2.5 sm:py-3 text-sm sm:text-base bg-white text-[#632EE3] font-semibold rounded-lg shadow-lg border-2 border-[#632EE3] hover:bg-purple-50 transition-all"
             >
-              Post an Product
+              <NavLink to="/createProduct">Post an Product</NavLink>
             </motion.button>
           </motion.div>
 
