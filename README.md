@@ -16,7 +16,7 @@ A modern React-based marketplace application for buying and selling used product
 
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/nozibuddowla/smart-deals-client
    cd smart-deals-client
    ```
 
