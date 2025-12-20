@@ -17,7 +17,7 @@ const MyBids = () => {
       if (user?.email) {
         try {
           setLoading(true);
-          const token = localStorage.getItem("token");
+          const token = await user.getIdToken();
 
           if (!token) {
             console.error("No token found");
