@@ -44,26 +44,28 @@ const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
       // console.log("current user: ", currentUser);
-      
+
       if (currentUser) {
         const loggedUser = { email: currentUser.email };
         // console.log("auth provider onstate", loggedUser);
-        
+
         fetch(`${import.meta.env.VITE_API_URL}/getToken`, {
-          method: "POST", 
+          method: "POST",
           headers: {
-            "content-type": "application/json"
+            "content-type": "application/json",
           },
-          body: JSON.stringify(loggedUser)
+          body: JSON.stringify(loggedUser),
         })
           .then((res) => res.json())
           .then((data) => {
             // console.log("after getting token", data.token);
-            localStorage.setItem("token", data.token)
+            localStorage.setItem("token", data.token);
           });
+      } else {
+        localStorage.removeItem("token");
       }
       setLoading(false);
     });
