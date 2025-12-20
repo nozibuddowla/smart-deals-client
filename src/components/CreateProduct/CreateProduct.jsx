@@ -5,10 +5,12 @@ import { FaArrowLeft } from "react-icons/fa6";
 import Swal from "sweetalert2";
 import axios from "axios";
 import useAuth from "../../hooks/useAuth";
+import useAxios from "../../hooks/useAxios";
 
 const CreateProduct = () => {
   const { user } = useAuth();
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState([])
+  const axiosInstance = useAxios();
 
   const handleCreateProductSubmit = (event) => {
     event.preventDefault();
@@ -50,24 +52,31 @@ const CreateProduct = () => {
       created_at: new Date().toISOString(),
     };
 
-    axios
-      .post(`${import.meta.env.VITE_API_URL}/products`, newProduct)
-      .then((res) => {
-        console.log(res.data);
-        if (res.data.insertedId) {
-          Swal.fire({
-            position: "top-end",
-            icon: "success",
-            title: "Your Product has been created successfully!",
-            showConfirmButton: false,
-            timer: 1500,
-          });
+    axiosInstance.post("/products", newProduct)
+      .then(res => {
+      console.log(res.data);
+      
+    })
 
-          form.reset();
-          const newProductsArray = [...products, newProduct];
-          setProducts(newProductsArray);
-        }
-      });
+    // axios
+    //   .post(`${import.meta.env.VITE_API_URL}/products`, newProduct)
+    //   .then((res) => {
+    //     // console.log(res.data);
+    //     if (res.data.insertedId) {
+    //       Swal.fire({
+    //         position: "top-end",
+    //         icon: "success",
+    //         title: "Your Product has been created successfully!",
+    //         showConfirmButton: false,
+    //         timer: 1500,
+    //       });
+
+    //       form.reset();
+    //       const newProductsArray = [...products, newProduct];
+    //       setProducts(newProductsArray);
+    //     }
+    //   });
+
     // fetch(`${import.meta.env.VITE_API_URL}/products`, {
     //   method: "POST",
     //   headers: {
