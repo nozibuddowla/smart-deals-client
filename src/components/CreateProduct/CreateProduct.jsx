@@ -6,11 +6,14 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import useAuth from "../../hooks/useAuth";
 import useAxios from "../../hooks/useAxios";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const CreateProduct = () => {
   const { user } = useAuth();
-  const [products, setProducts] = useState([])
-  const axiosInstance = useAxios();
+  const [products, setProducts] = useState([]);
+  // const axiosInstance = useAxios();
+
+  const axiosSecure = useAxiosSecure();
 
   const handleCreateProductSubmit = (event) => {
     event.preventDefault();
@@ -52,11 +55,13 @@ const CreateProduct = () => {
       created_at: new Date().toISOString(),
     };
 
-    axiosInstance.post("/products", newProduct)
-      .then(res => {
-      console.log(res.data);
-      
-    })
+    axiosSecure.post("/products", newProduct).then((res) => {
+      console.log("after secure call", res.data);
+    });
+
+    // axiosInstance.post("/products", newProduct).then((res) => {
+    //   console.log(res.data);
+    // });
 
     // axios
     //   .post(`${import.meta.env.VITE_API_URL}/products`, newProduct)
