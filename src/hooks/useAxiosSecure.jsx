@@ -9,6 +9,7 @@ const useAxiosSecure = () => {
   const { user } = useAuth();
 
   //  set token in the header for all the api call using axiosSecure hook
+  // request interceptor
   instance.interceptors.request.use((config) => { 
     console.log(config);
 
