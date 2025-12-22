@@ -228,5 +228,6 @@ All API calls include error handling and loading states.
 ---
 
 **Live Demo:** [https://smart-deals-nozib.netlify.app/](https://smart-deals-nozib.netlify.app/)
+**Live Demo:** [https://smart-deals-d7718.web.app/](https://smart-deals-d7718.web.app/)
 
 **Backend Repository:** [https://github.com/nozibuddowla/smart-deals-server](https://github.com/nozibuddowla/smart-deals-server)
