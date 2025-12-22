@@ -102,19 +102,21 @@ const Navbar = () => {
               </div>
               <ul
                 tabIndex={0}
-                className="menu menu-compact dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow-lg"
+                className="menu menu-compact dropdown-content bg-base-100 rounded-box z-50 mt-3 p-3 shadow-lg border border-base-300"
               >
-                <li className="menu-title">
-                  <span className="text-[#001931] text-sm font-semibold">
-                    {user?.displayName || user?.name || "User"}
-                  </span>
-                  <span className="text-xs text-gray-500">{user?.email}</span>
+                <li className="pointer-events-none">
+                  <div className="flex flex-col space-y-1 p-2">
+                    <span className="text-[#001931] text-sm font-semibold">
+                      {user?.displayName || user?.name || "User"}
+                    </span>
+                    <span className="text-xs text-gray-500">{user?.email}</span>
+                  </div>
                 </li>
-                <div className="divider my-0"></div>
+                <div className="divider my-1"></div>
                 <li>
                   <button
                     onClick={handleSignOut}
-                    className="text-red-600 hover:bg-red-50 gap-4"
+                    className="text-red-600 hover:bg-red-50 flex items-center gap-3"
                   >
                     <IoIosLogOut size={20} />
                     <span>Logout</span>

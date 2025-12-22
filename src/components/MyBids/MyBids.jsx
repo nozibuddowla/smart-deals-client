@@ -3,65 +3,89 @@ import { AuthContext } from "../../context/AuthContext";
 import MyContainer from "../MyContainer";
 import Swal from "sweetalert2";
 import Loader from "../Loader/Loader";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const MyBids = () => {
   const { user } = use(AuthContext);
   const [bids, setBids] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const axiosSecure = useAxiosSecure();
 
   // console.log("token: ", user.accessToken);
 
   useEffect(() => {
     const fetchBids = async () => {
-      if (user?.email) {
-        try {
-          setLoading(true);
-          const token = await user.getIdToken();
+      try {
+        setLoading(true);
+        setError(null);
 
-          if (!token) {
-            console.error("No token found");
-            setError("Authentication required. Please login again.");
-            setLoading(false);
-            return;
-          }
-
-          const res = await fetch(
-            `${import.meta.env.VITE_API_URL}/bids?email=${user.email}`,
-            {
-              headers: {
-                authorization: `Bearer ${token}`,
-              },
-            }
-          );
-
-          if (!res.ok) {
-            throw new Error(`HTTP ${res.status}: ${res.statusText}`);
-          }
-
-          const data = await res.json();
-          // console.log("Bids data:", data);
-
-          if (Array.isArray(data)) {
-            setBids(data);
-            setError(null);
-          } else {
-            console.error("Expected array but got:", data);
-            setError(data.message || "Failed to load bids");
-            setBids([]);
-          }
-        } catch (err) {
-          console.error("Error fetching bids:", err);
-          setError(err.message);
-          setBids([]);
-        } finally {
-          setLoading(false); // ✅ Always set loading to false
-        }
+        const res = await axiosSecure.get(`/bids?email=${user.email}`);
+        setBids(res.data || []);
+      } catch (err) {
+        console.error("Error fetching bids:", err);
+        setError(err.message || "Failed to load bids");
+        setBids([]);
+      } finally {
+        setLoading(false);
       }
     };
 
-    fetchBids();
-  }, [user]);
+    if (user?.email) {
+      fetchBids();
+    }
+  }, [user, axiosSecure]);
+
+  // useEffect(() => {
+  //   const fetchBids = async () => {
+  //     if (user?.email) {
+  //       try {
+  //         setLoading(true);
+  //         const token = await user.getIdToken();
+
+  //         if (!token) {
+  //           console.error("No token found");
+  //           setError("Authentication required. Please login again.");
+  //           setLoading(false);
+  //           return;
+  //         }
+
+  //         const res = await fetch(
+  //           `${import.meta.env.VITE_API_URL}/bids?email=${user.email}`,
+  //           {
+  //             headers: {
+  //               authorization: `Bearer ${token}`,
+  //             },
+  //           }
+  //         );
+
+  //         if (!res.ok) {
+  //           throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+  //         }
+
+  //         const data = await res.json();
+  //         // console.log("Bids data:", data);
+
+  //         if (Array.isArray(data)) {
+  //           setBids(data);
+  //           setError(null);
+  //         } else {
+  //           console.error("Expected array but got:", data);
+  //           setError(data.message || "Failed to load bids");
+  //           setBids([]);
+  //         }
+  //       } catch (err) {
+  //         console.error("Error fetching bids:", err);
+  //         setError(err.message);
+  //         setBids([]);
+  //       } finally {
+  //         setLoading(false); // ✅ Always set loading to false
+  //       }
+  //     }
+  //   };
+
+  //   fetchBids();
+  // }, [user]);
 
   const handleDeleteBid = (_id) => {
     Swal.fire({
@@ -154,9 +178,7 @@ const MyBids = () => {
                   <th scope="col" className="px-6 py-3 font-medium">
                     Product
                   </th>
-                  <th scope="col" className="px-6 py-3 font-medium">
-                    Seller
-                  </th>
+
                   <th scope="col" className="px-4 py-3 font-medium">
                     Bid Price
                   </th>
@@ -178,40 +200,22 @@ const MyBids = () => {
                     <td className="w-14 p-4 font-medium text-gray-900">
                       {index + 1}
                     </td>
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-3">
-                        <div className="h-10 w-16 overflow-hidden">
+                    <td className="px-2 sm:px-3 md:px-4 lg:px-6 py-3 md:py-4">
+                      <div className="flex items-center gap-2 sm:gap-3">
+                        <div className="h-12 w-12 sm:h-14 sm:w-14 md:h-16 md:w-16 shrink-0 overflow-hidden rounded-md bg-gray-50">
                           <img
                             src={bid?.product_details?.image}
                             alt={bid?.product_details?.title}
                             className="w-full h-full object-contain"
+                            loading="lazy"
                           />
                         </div>
-                        <div>
-                          <div className="font-medium text-[#001931] leading-5 line-clamp-1">
-                            {bid?.product_details?.title.slice(0, 25)}
+                        <div className="flex-1 min-w-0">
+                          <div className="font-medium text-[#001931] leading-5 line-clamp-1 mb-1">
+                            {bid?.product_details?.title}
                           </div>
-                          <div className="text-sm leading-4 text-[#001931] opacity-80">
+                          <div className="text-xs sm:text-sm leading-4 text-[#001931] opacity-80 font-semibold">
                             ${bid?.product_details?.price_min}
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-3">
-                        <div className="h-10 w-10 rounded-full overflow-hidden">
-                          <img
-                            src={bid?.buyer_image}
-                            alt={bid?.buyer_name}
-                            className=" w-full h-full object-cover"
-                          />
-                        </div>
-                        <div>
-                          <div className="font-medium text-[#001931] leading-5">
-                            {bid.buyer_name}
-                          </div>
-                          <div className="text-sm leading-4 text-[#001931] opacity-80">
-                            {bid.buyer_email}
                           </div>
                         </div>
                       </div>
